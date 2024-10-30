@@ -1,5 +1,5 @@
-﻿using System;
-using Library;
+﻿using Library;
+using System;
 
 namespace Program
 {
@@ -7,24 +7,46 @@ namespace Program
     {
         static void Main(string[] args)
         {
-            Node n1 = new Node(1);
-            Node n2 = new Node(2);
-            Node n3 = new Node(3);
-            Node n4 = new Node(4);
-            Node n5 = new Node(5);
-            Node n6 = new Node(6);
-            Node n7 = new Node(7);
+            Person p1 = new Person("Juan", 25);
+            Person p2 = new Person("Pedro", 30);
+            Person p3 = new Person("Maria", 35);
+            Person p4 = new Person("Ana", 40);
+            Person p5 = new Person("Luis", 45);
+            Person p6 = new Person("Carlos", 50);
+            Person p7 = new Person("Jose", 55);
 
-            n1.AddChildren(n2);
-            n1.AddChildren(n3);
+            // Crear el árbol de `Node<Person>`
+            Node<Person> rootPerson = new Node<Person>(p1);
+            Node<Person> child1 = new Node<Person>(p2);
+            Node<Person> child2 = new Node<Person>(p3);
+            Node<Person> grandchild1 = new Node<Person>(p4);
+            Node<Person> grandchild2 = new Node<Person>(p5);
+            Node<Person> grandchild3 = new Node<Person>(p6);
+            Node<Person> grandchild4 = new Node<Person>(p7);
 
-            n2.AddChildren(n4);
-            n2.AddChildren(n5);
+            rootPerson.AddChildren(child1);
+            rootPerson.AddChildren(child2);
+            child1.AddChildren(grandchild1);
+            child1.AddChildren(grandchild2);
+            child2.AddChildren(grandchild3);
+            child2.AddChildren(grandchild4);
 
-            n3.AddChildren(n6);
-            n3.AddChildren(n7);
+            AgeNumVisitor ageSumVisitor = new AgeNumVisitor();
+            rootPerson.Accept(ageSumVisitor);
+            int totalAge = ageSumVisitor.GetTotalAge();
+            Console.WriteLine($"La suma total de las edades es: {totalAge}");
 
-            // visitar el árbol aquí
+            // 1. Determinar la edad del hijo más grande
+            OldestChildVisitor oldestChildVisitor = new OldestChildVisitor();
+            rootPerson.Accept(oldestChildVisitor);
+            int oldestChildAge = oldestChildVisitor.GetOldestChildAge();
+            Console.WriteLine($"La edad del hijo más grande es: {oldestChildAge}");
+
+            // 2. Determinar el nombre más largo
+            LongestNameVisitor longestNameVisitor = new LongestNameVisitor();
+            rootPerson.Accept(longestNameVisitor);
+            string longestName = longestNameVisitor.GetLongestName();
+            Console.WriteLine($"El nombre más largo es: {longestName}");
         }
     }
 }
